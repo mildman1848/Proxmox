@@ -29,6 +29,8 @@ Find the scripts in the website linked above.
 
 Any issues with the scripts, please put an issue within this repository rather than upstream, as it is likely caused by my modifications.
 
+Includes an Alpine-based Audiobookshelf setup with automatic arch/version selection.
+
 ### Support
 
 If you would like to offer support, I would appreciate a star on the repository, or for you to support the creator of the Proxmox scripts [tteck on Ko-Fi](https://ko-fi.com/D1D7EP4GF)!

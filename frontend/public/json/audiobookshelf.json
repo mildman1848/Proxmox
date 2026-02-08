@@ -25,6 +25,17 @@
         "os": "debian",
         "version": "13"
       }
+    },
+    {
+      "type": "alpine",
+      "script": "ct/alpine-audiobookshelf.sh",
+      "resources": {
+        "cpu": 2,
+        "ram": 2048,
+        "hdd": 5,
+        "os": "alpine",
+        "version": "3.23"
+      }
     }
   ],
   "default_credentials": {

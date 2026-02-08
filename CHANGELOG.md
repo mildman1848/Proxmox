@@ -21,6 +21,13 @@ Exercise vigilance regarding copycat or coat-tailing sites that seek to exploit 
 
 
 <details>
+<summary><h4>February - 1 entry</h4></summary>
+
+[View February 2026 Changelog](.github/changelogs/2026/02.md)
+
+</details>
+
+<details>
 <summary><h4>January - 27 entries</h4></summary>
 
 [View January 2026 Changelog](.github/changelogs/2026/01.md)
