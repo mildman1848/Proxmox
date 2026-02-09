@@ -30,6 +30,7 @@ Find the scripts in the website linked above.
 Any issues with the scripts, please put an issue within this repository rather than upstream, as it is likely caused by my modifications.
 
 Includes an Alpine-based Audiobookshelf setup with automatic arch/version selection.
+AdGuard Home installer now auto-selects the correct platform download by architecture.
 
 ### Support
 
