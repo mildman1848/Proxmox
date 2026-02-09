@@ -14,11 +14,18 @@ network_check
 update_os
 
 msg_info "Installing Dependencies"
-$STD apk add --no-cache openssl
+$STD apk add --no-cache curl jq openssl
 msg_ok "Installed Dependencies"
 
-GITEA_RELEASE=$(curl -s https://api.github.com/repos/deuxfleurs-org/garage/tags | jq -r '.[0].name')
-curl -fsSL "https://garagehq.deuxfleurs.fr/_releases/${GITEA_RELEASE}/aarch64-unknown-linux-musl/garage" -o /usr/local/bin/garage
+GARAGE_RELEASE=$(curl -s https://api.github.com/repos/deuxfleurs-org/garage/tags | jq -r '.[0].name')
+arch="$(uname -m)"
+case "$arch" in
+  x86_64|amd64) garage_arch="x86_64-unknown-linux-musl" ;;
+  aarch64|arm64) garage_arch="aarch64-unknown-linux-musl" ;;
+  armv7l|armhf) garage_arch="armv7-unknown-linux-musleabihf" ;;
+  *) msg_error "Unsupported architecture: $arch" && exit 1 ;;
+esac
+curl -fsSL "https://garagehq.deuxfleurs.fr/_releases/${GARAGE_RELEASE}/${garage_arch}/garage" -o /usr/local/bin/garage
 chmod +x /usr/local/bin/garage
 mkdir -p /var/lib/garage/{data,meta,snapshots}
 mkdir -p /etc/garage
@@ -31,7 +38,7 @@ METRICS_TOKEN=$(openssl rand -base64 32)
   echo "Admin Token: $ADMIN_TOKEN"
   echo "Metrics Token: $METRICS_TOKEN"
 } >~/garage.creds
-echo $GITEA_RELEASE >>~/.garage
+echo "${GARAGE_RELEASE}" >>~/.garage
 cat <<EOF >/etc/garage.toml
 metadata_dir = "/var/lib/garage/meta"
 data_dir = "/var/lib/garage/data"
