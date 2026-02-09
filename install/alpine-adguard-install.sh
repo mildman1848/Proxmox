@@ -14,13 +14,21 @@ network_check
 update_os
 
 msg_info "Downloading AdGuard Home"
-$STD curl -fsSL -o /tmp/AdGuardHome_linux_arm64.tar.gz \
-  "https://github.com/AdguardTeam/AdGuardHome/releases/latest/download/AdGuardHome_linux_arm64.tar.gz"
+arch="$(uname -m)"
+case "$arch" in
+  x86_64|amd64) ag_arch="amd64" ;;
+  aarch64|arm64) ag_arch="arm64" ;;
+  armv7l|armhf) ag_arch="armv7" ;;
+  *) msg_error "Unsupported architecture: $arch" && exit 1 ;;
+esac
+tarball="AdGuardHome_linux_${ag_arch}.tar.gz"
+$STD curl -fsSL -o "/tmp/${tarball}" \
+  "https://github.com/AdguardTeam/AdGuardHome/releases/latest/download/${tarball}"
 msg_ok "Downloaded AdGuard Home"
 
 msg_info "Installing AdGuard Home"
-$STD tar -xzf /tmp/AdGuardHome_linux_arm64.tar.gz -C /opt
-$STD rm /tmp/AdGuardHome_linux_arm64.tar.gz
+$STD tar -xzf "/tmp/${tarball}" -C /opt
+$STD rm "/tmp/${tarball}"
 msg_ok "Installed AdGuard Home"
 
 msg_info "Creating AdGuard Home Service"

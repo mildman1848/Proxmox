@@ -45,14 +45,25 @@ cat <<EOF >/var/www/html/index.html
 EOF
 msg_ok "Installed Caddy"
 
-read -r -p "${TAB3}Would you like to install xCaddy Addon? <y/N> " prompt
+prompt="n"
+if [ -t 0 ]; then
+  read -r -p "${TAB3}Would you like to install xCaddy Addon? <y/N> " prompt
+fi
 if [[ "${prompt,,}" =~ ^(y|yes)$ ]]; then
   GO_VERSION="$(curl -fsSL https://go.dev/VERSION?m=text | head -1 | cut -c3-)" setup_go
   msg_info "Setup xCaddy"
   cd /opt
   RELEASE=$(curl -fsSL https://api.github.com/repos/caddyserver/xcaddy/releases/latest | grep "tag_name" | awk '{print substr($2, 2, length($2)-3) }')
-  curl -fsSL "https://github.com/caddyserver/xcaddy/releases/download/${RELEASE}/xcaddy_${RELEASE:1}_linux_arm64.tar.gz" -o "xcaddy_${RELEASE:1}_linux_arm64.tar.gz"
-  $STD tar xzf xcaddy_"${RELEASE:1}"_linux_arm64.tar.gz -C /usr/local/bin xcaddy
+  arch="$(uname -m)"
+  case "$arch" in
+    x86_64|amd64) xcaddy_arch="amd64" ;;
+    aarch64|arm64) xcaddy_arch="arm64" ;;
+    armv7l|armhf) xcaddy_arch="armv7" ;;
+    *) msg_error "Unsupported architecture: $arch" && exit 1 ;;
+  esac
+  xcaddy_tar="xcaddy_${RELEASE:1}_linux_${xcaddy_arch}.tar.gz"
+  curl -fsSL "https://github.com/caddyserver/xcaddy/releases/download/${RELEASE}/${xcaddy_tar}" -o "${xcaddy_tar}"
+  $STD tar xzf "${xcaddy_tar}" -C /usr/local/bin xcaddy
   rm -rf /opt/xcaddy*
   $STD xcaddy build
   msg_ok "Setup xCaddy"

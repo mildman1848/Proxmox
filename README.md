@@ -31,6 +31,7 @@ Any issues with the scripts, please put an issue within this repository rather t
 
 Includes an Alpine-based Audiobookshelf setup with automatic arch/version selection.
 AdGuard Home installer now auto-selects the correct platform download by architecture.
+Alpine AdGuard Home/Caddy/Docker now auto-select arch-specific downloads; Alpine Caddy/Docker/bitmagnet skip prompts when non-interactive.
 
 ### Support
 
